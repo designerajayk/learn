@@ -1,5 +1,7 @@
 import React from 'react';
 import map from 'lodash/map';
+import validateInput from '../../../server/shared/validations/signup';
+import TextArea from '../common/TextArea';
 
 import countrys from '../../data/country';
 
@@ -22,20 +24,26 @@ class SignupForm extends React.Component {
         this.onSubmit = this.onSubmit.bind(this);
 
     }
+    isValid(){
+      const { errors, isValid } = validateInput(this.state);
 
+      if(!isValid){
+        this.setState({errors})
+      }
+      return isValid;
+    }
     onChange(e) {
         this.setState({
             [e.target.name]: e.target.value
         })
     }
     onSubmit(e) {
-
+      e.preventDefault();
+      if(this.isValid()){
         this.setState({errors: {}, isLoad: true})
-        e.preventDefault();
-        this.props.userSign(this.state).then(
-()=>{},
-({response})=>{this.setState({errors:response.data, isLoad: false}) }
-);﻿
+        this.props.userSign(this.state).then(() => {}, ({response}) => {
+            this.setState({errors: response.data, isLoad: false})
+        });}
     }
     render() {
         const {errors} = this.state;
@@ -43,30 +51,10 @@ class SignupForm extends React.Component {
         )
         return (
             <form onSubmit={this.onSubmit}>
-                <FormGroup controlId="username" validationState={errors.username}>
-                    <ControlLabel>User Name</ControlLabel>
-                    <FormControl type="text" name="username" value={this.state.username} onChange={this.onChange}/>
-                    <FormControl.Feedback/>
-                </FormGroup>
-
-                <FormGroup controlId="email" validationState={errors.email}>
-                    <ControlLabel>Email address</ControlLabel>
-                    <FormControl type="text" name="email" value={this.state.email} onChange={this.onChange}/>
-                    <FormControl.Feedback/>
-                </FormGroup>
-
-                <FormGroup controlId="password" validationState={errors.password}>
-                    <ControlLabel>Password</ControlLabel>
-                    <FormControl type="password" name="password" value={this.state.password} onChange={this.onChange}/>
-                    <FormControl.Feedback/>
-                </FormGroup>
-
-                <FormGroup controlId="passwordCon" validationState={errors.passwordCon}>
-                    <ControlLabel>Password Conformation</ControlLabel>
-                    <FormControl type="password" name="passwordCon" value={this.state.passwordCon} onChange={this.onChange}/>
-                    <FormControl.Feedback/>
-                </FormGroup>
-
+              <TextArea id="username" label="User name" error={errors.username} onChange={this.onChange} value={this.state.username} />
+              <TextArea id="email" label="Email address" error={errors.email} onChange={this.onChange} value={this.state.email} />
+              <TextArea id="password" label="Password" type="password" error={errors.password} onChange={this.onChange} value={this.state.password} />
+              <TextArea id="passwordCon" label="Email address" type="password" error={errors.passwordCon} onChange={this.onChange} value={this.state.passwordCon} />
                 <FormGroup controlId="country" validationState={errors.country}>
                     <ControlLabel>Contry</ControlLabel>
                     <FormControl name="country" componentClass="select" placeholder="select" value={this.state.country} onChange={this.onChange}>
