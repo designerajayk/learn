@@ -4,13 +4,13 @@ import isEmpty from 'lodash/isEmpty';
 
 let router = express.Router();
 
-let allEqual = arr => arr.every(v => v == arr[0]);
+let allEqual = arr => arr.every(v => v == arr[0] && arr[0] == 'success');
 
 function validateInput(data) {
     let errors = {};
 
     if (Validator.isEmpty(data.username)) {
-        errors.username = 'warning';
+        errors.username = 'error';
     } else {
         errors.username = 'success';
     }

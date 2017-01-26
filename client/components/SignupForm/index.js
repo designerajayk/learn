@@ -15,7 +15,8 @@ class SignupForm extends React.Component {
             passwordCon: '',
             country: '',
             message: '',
-            errors: {}
+            errors: {},
+            isLoad: false
         }
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -29,11 +30,11 @@ class SignupForm extends React.Component {
     }
     onSubmit(e) {
 
-        this.setState({errors: {}})
+        this.setState({errors: {}, isLoad: true})
         e.preventDefault();
         this.props.userSign(this.state).then(
 ()=>{},
-({response})=>{this.setState({errors:response.data})}
+({response})=>{this.setState({errors:response.data, isLoad: false}) }
 );﻿
     }
     render() {
@@ -82,7 +83,7 @@ class SignupForm extends React.Component {
                 </FormGroup>
 
                 <FormGroup>
-                    <Button type="submit" bsStyle="primary" bsSize="large" block>
+                    <Button disabled={this.state.isLoad} type="submit" bsStyle="primary" bsSize="large" block>
                         Submit
                     </Button>
                 </FormGroup>
