@@ -24,8 +24,5 @@ class SignupPage extends React.Component {
   }
 }
 
-SignupPage.propTypes = {
-  userSign: React.PropTypes.func.isRequired
-}
 
 export default connect(null, {userSign} )(SignupPage);

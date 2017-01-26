@@ -41,7 +41,12 @@ class SignupForm extends React.Component {
       e.preventDefault();
       if(this.isValid()){
         this.setState({errors: {}, isLoad: true})
-        this.props.userSign(this.state).then(() => {}, ({response}) => {
+        this.props.userSign(this.state).then(
+          () => {
+            //browserHistory.push('/');
+            this.context.router.push('/');
+          },
+          ({response}) => {
             this.setState({errors: response.data, isLoad: false})
         });}
     }
@@ -54,7 +59,7 @@ class SignupForm extends React.Component {
               <TextArea id="username" label="User name" error={errors.username} onChange={this.onChange} value={this.state.username} />
               <TextArea id="email" label="Email address" error={errors.email} onChange={this.onChange} value={this.state.email} />
               <TextArea id="password" label="Password" type="password" error={errors.password} onChange={this.onChange} value={this.state.password} />
-              <TextArea id="passwordCon" label="Email address" type="password" error={errors.passwordCon} onChange={this.onChange} value={this.state.passwordCon} />
+              <TextArea id="passwordCon" label="Password Conformation" type="password" error={errors.passwordCon} onChange={this.onChange} value={this.state.passwordCon} />
                 <FormGroup controlId="country" validationState={errors.country}>
                     <ControlLabel>Contry</ControlLabel>
                     <FormControl name="country" componentClass="select" placeholder="select" value={this.state.country} onChange={this.onChange}>
@@ -81,5 +86,14 @@ class SignupForm extends React.Component {
 
     }
 }
+
+SignupForm.propTypes = {
+  userSign: React.PropTypes.func.isRequired
+}
+
+SignupForm.contextTypes = {
+    router: React.PropTypes.object.isRequired
+}
+
 
 export default SignupForm;
